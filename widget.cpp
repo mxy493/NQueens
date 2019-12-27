@@ -69,20 +69,20 @@ void Widget::paintEvent(QPaintEvent *event)
     {
         vector<string> res=nqueens.front();
         //绘制第一种解法
-
         QImage image;
         image.load("D:/mxy/Documents/QtProject/NQueens/NQueens/img/queen.png");
-        for(int i=0;i<res.size();i++)
+        QImage scaledImage = image.scaled(getGridWidth(), getGridWidth(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        for(int i=0;i < res.size();i++)
         {
             string e=res[i];
-            for(int j=0;j<e.size();j++)
+            for(int j=0;j < e.size();j++)
             {
                 char c=e[j];
                 if(c=='Q')
                 {
 //                    QRectF target(10.0, 20.0, 80.0, 60.0);
 //                    QRectF source(10.0, 20.0, 80.0, 60.0);
-                    painter.drawImage(boardMargin + j * getGridWidth(), boardMargin + i * getGridWidth(), image);
+                    painter.drawImage(boardMargin + j * getGridWidth(), boardMargin + i * getGridWidth(), scaledImage);
                     //painter.drawText(boardMargin + getGridWidth() / 2 + j * getGridWidth(), boardMargin + getGridWidth() / 2 + i * getGridWidth(),"queen");
                 }
             }
