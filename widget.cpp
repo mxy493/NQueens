@@ -14,6 +14,19 @@ Widget::~Widget()
     delete ui;
 }
 
+int Widget::getN()
+{
+    QString a = ui->lineEdit_n->text();
+    return a.toInt();
+}
+
+void Widget::getSolution()
+{
+    NQueens queen;
+    int algorithm = ui->comboBox->currentIndex();
+    nqueens = queen.solveNQueens(getN(), algorithm);
+    time = queen.getTime();
+}
 
 int Widget::getBoardWidth()
 {
@@ -30,14 +43,43 @@ int Widget::getGridWidth()
     return (width - 2 * boardMargin) / n;
 }
 
+void Widget::adjustPosition()
+{
+    QString a = ui->lineEdit_n->text();
+    int n = a.toInt();
+    //窗口大小
+    this->resize(height() + 100 + 120, height());
+
+    int xspace = (width() - (boardMargin + n * getGridWidth())) / 4;
+    //int yspace = height() - 100;
+    //复选框
+    ui->comboBox->resize(2 * xspace, 40);
+    ui->comboBox->move(width() - 3 * xspace, 50);
+    //标签
+    ui->label->move(width() - 3 * xspace, 50 + 60);
+    ui->label_width->move(width() - 3 * xspace + 60, 50 + 60);
+    ui->label_2->move(width() - 3 * xspace, 50 + 90);
+    ui->label_height->move(width() - 3 * xspace + 60, 50 + 90);
+    ui->label_3->move(width() - 3 * xspace, 50 + 120);
+    ui->label_time->move(width() - 3 * xspace + 60, 50 + 120);
+    //单行输入框
+    ui->lineEdit_n->resize(2 * xspace, 40);
+    ui->lineEdit_n->move(width() - 3 * xspace, height() - 50 - 100);
+    //RUN按钮
+    ui->pushButton_run->resize(2 * xspace, 40);
+    ui->pushButton_run->move(width() - 3 * xspace, height() - 50 - 40);
+}
+
 void Widget::paintEvent(QPaintEvent *event)
 {
+    int n = getN();//皇后数
     //打印窗口大小
     ui->label_width->setText(QString::number(width()));
     ui->label_height->setText(QString::number(height()));
 
-    QString a = ui->lineEdit_n->text();
-    int n = a.toInt();
+    //动态调整部件位置
+    adjustPosition();
+
     QPainter painter(this);
 //    QPen pen=painter.pen();
 //    pen.setColor(QColor("#8D5822"));
@@ -63,8 +105,6 @@ void Widget::paintEvent(QPaintEvent *event)
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
 
-    NQueens queen;
-    vector<vector<string>> nqueens = queen.solveNQueens(n);
     if(!nqueens.empty())
     {
         vector<string> res=nqueens.front();
@@ -99,10 +139,14 @@ void Widget::on_comboBox_activated(const QString &arg1)
 //点击RUN按钮运行程序
 void Widget::on_pushButton_run_clicked()
 {
-    QString a = ui->lineEdit_n->text();
-    int n = a.toInt();
-    // queen;
-//    vector<vector<string>> nqueens = queen.solveNQueens(n);
-    //update();
-    repaint();
+    NQueens queen;
+    getSolution();
+
+    //打印耗时
+    QString time_string = QString::number(time, 'f', 4);//以浮点数格式输出，小数点后保留四位
+    time_string.append('s');
+    ui->label_time->setText(time_string);
+
+    update();
+//    repaint();
 }
