@@ -1,6 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
-#include "NQueens.h"
+#include "Backtrack.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)

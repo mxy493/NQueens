@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "NQueens.h"
+#include "Backtrack.h"
 
 #include <QApplication>
 
