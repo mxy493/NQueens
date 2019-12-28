@@ -19,6 +19,7 @@ SOURCES += \
     Backtrack.cpp \
     Genetic.cpp \
     NQueens.cpp \
+    SimulatedAnnealing.cpp \
     main.cpp \
     widget.cpp
 
@@ -26,6 +27,7 @@ HEADERS += \
     Backtrack.h \
     Genetic.h \
     NQueens.h \
+    SimulatedAnnealing.h \
     nqueens.h \
     widget.h
 

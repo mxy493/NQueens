@@ -29,6 +29,10 @@ vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
     }
     else if (algorithm == 2){
         //模拟退火
+        SimulatedAnnealing queen;
+        vector<vector<string>> res = queen.solveNQueens(n);
+        time = queen.getTime();
+        return res;
     }
     else if(algorithm == 3){
         //爬山法

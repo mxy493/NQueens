@@ -7,6 +7,7 @@
 
 #include "Backtrack.h"
 #include "Genetic.h"
+#include "SimulatedAnnealing.h"
 
 using namespace std;
 
