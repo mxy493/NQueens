@@ -1,6 +1,5 @@
 #include "widget.h"
 #include "ui_widget.h"
-#include "Backtrack.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -22,7 +21,7 @@ int Widget::getN()
 
 void Widget::getSolution()
 {
-    Backtrack queen;
+    NQueens queen;
     int algorithm = ui->comboBox->currentIndex();
     nqueens = queen.solveNQueens(getN(), algorithm);
     time = queen.getTime();
@@ -139,7 +138,6 @@ void Widget::on_comboBox_activated(const QString &arg1)
 //点击RUN按钮运行程序
 void Widget::on_pushButton_run_clicked()
 {
-    Backtrack queen;
     getSolution();
 
     //打印耗时

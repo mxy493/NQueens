@@ -11,6 +11,9 @@
 #include <vector>
 #include <time.h>
 
+#include "NQueens.h"
+#include "Backtrack.h"
+
 using namespace std;
 
 QT_BEGIN_NAMESPACE

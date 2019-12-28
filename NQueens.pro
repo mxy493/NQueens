@@ -23,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     Backtrack.h \
+    NQueens.h \
     nqueens.h \
     widget.h
 

@@ -11,21 +11,8 @@ Backtrack::~Backtrack()
 }
 
 /* 输入棋盘边长 n，返回所有合法的放置 */
-vector<vector<string>> Backtrack::solveNQueens(int n, int algorithm) {
+vector<vector<string>> Backtrack::solveNQueens(int n) {
     // '.' 表示空，'Q' 表示皇后，初始化空棋盘。
-    if(algorithm == 0){
-        //回溯法
-    }
-    else if (algorithm == 1){
-        //遗传算法
-    }
-    else if (algorithm == 2){
-        //模拟退火
-    }
-    else if(algorithm == 3){
-        //爬山法
-    }
-
     clock_t start = clock();
 
     vector<string> board(n, string(n, '.'));//初始化全为'.'

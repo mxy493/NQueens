@@ -1,5 +1,5 @@
-#ifndef NQUEENS_H
-#define NQUEENS_H
+#ifndef BACKTRACK_H
+#define BACKTRACK_H
 
 #include <iostream>
 #include <string>
@@ -7,12 +7,13 @@
 #include <time.h>
 using namespace std;
 
+//回溯法
 class Backtrack
 {
 public:
     Backtrack();
     ~Backtrack();
-    vector<vector<string>> solveNQueens(int n, int algorithm);
+    vector<vector<string>> solveNQueens(int n);
     void backtrack(vector<string>& board, int row);
     bool isValid(vector<string>& board, int row, int col);
     double getTime(){return time;}
@@ -22,4 +23,4 @@ private:
     double time;
 };
 
-#endif // NQUEENS_H
+#endif // BACKTRACK_H
