@@ -1,5 +1,4 @@
 #include "NQueens.h"
-#include "Backtrack.h"
 
 NQueens::NQueens()
 {
@@ -23,6 +22,10 @@ vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
     }
     else if (algorithm == 1){
         //遗传算法
+        Genetic queen(n);
+        vector<vector<string>> res = queen.GeneticCalculation();
+        time = queen.getTime();
+        return res;
     }
     else if (algorithm == 2){
         //模拟退火

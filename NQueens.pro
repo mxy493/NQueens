@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Backtrack.cpp \
+    Genetic.cpp \
     NQueens.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
     Backtrack.h \
+    Genetic.h \
     NQueens.h \
     nqueens.h \
     widget.h

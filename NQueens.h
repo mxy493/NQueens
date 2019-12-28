@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "Backtrack.h"
+#include "Genetic.h"
+
 using namespace std;
 
 class NQueens
