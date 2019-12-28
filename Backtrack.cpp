@@ -1,17 +1,17 @@
 #include "Backtrack.h"
 
-NQueens::NQueens()
+Backtrack::Backtrack()
 {
     //构造函数
 }
 
-NQueens::~NQueens()
+Backtrack::~Backtrack()
 {
     //析构函数
 }
 
 /* 输入棋盘边长 n，返回所有合法的放置 */
-vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
+vector<vector<string>> Backtrack::solveNQueens(int n, int algorithm) {
     // '.' 表示空，'Q' 表示皇后，初始化空棋盘。
     if(algorithm == 0){
         //回溯法
@@ -39,7 +39,7 @@ vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
 // 路径：board 中小于 row 的那些行都已经成功放置了皇后
 // 选择列表：第 row 行的所有列都是放置皇后的选择
 // 结束条件：row 超过 board 的最后一行
-void NQueens::backtrack(vector<string>& board, int row) {
+void Backtrack::backtrack(vector<string>& board, int row) {
     // 触发结束条件
     if (row == board.size()) {
         res.push_back(board);
@@ -60,7 +60,7 @@ void NQueens::backtrack(vector<string>& board, int row) {
 }
 
 /* 是否可以在 board[row][col] 放置皇后？*/
-bool NQueens::isValid(vector<string>& board, int row, int col) {
+bool Backtrack::isValid(vector<string>& board, int row, int col) {
     int n = board.size();
     // 检查列是否有皇后互相冲突
     for (int i = 0; i < n; i++) {

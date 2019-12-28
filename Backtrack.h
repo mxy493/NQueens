@@ -7,11 +7,11 @@
 #include <time.h>
 using namespace std;
 
-class NQueens
+class Backtrack
 {
 public:
-    NQueens();
-    ~NQueens();
+    Backtrack();
+    ~Backtrack();
     vector<vector<string>> solveNQueens(int n, int algorithm);
     void backtrack(vector<string>& board, int row);
     bool isValid(vector<string>& board, int row, int col);
