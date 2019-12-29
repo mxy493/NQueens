@@ -30,7 +30,8 @@ private:
     vector<vector<string>> nqueens;//保存获取到的解
     double time;//耗时
 
-    int boardMargin = 50;//棋盘边缘
+    int xMargin = 50;//横向棋盘边缘
+    int yMargin = 50;//纵向棋盘边缘
 
     void paintEvent(QPaintEvent *event);
 
@@ -44,7 +45,6 @@ public:
     void adjustPosition();//动态调整部件位置
 
 private slots:
-    void on_comboBox_activated(const QString &arg1);
     void on_pushButton_run_clicked();
 };
 #endif // WIDGET_H

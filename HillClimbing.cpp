@@ -60,17 +60,17 @@ void HillClimbing::convert() {
         for (int j = 0; j < n; j++) {
             if (map[i][j] == 1) {
                 str += 'Q';
-                cout << "Q";
+//                cout << "Q";
             }
             else {
                 str += '.';
-                cout << ".";
+//                cout << ".";
             }
         }
-        cout << "\n";
+//        cout << "\n";
         queen.push_back(str);
     }
-    cout << "\n";
+//    cout << "\n";
     nqueens.push_back(queen);
 }
 

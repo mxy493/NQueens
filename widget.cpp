@@ -29,17 +29,16 @@ void Widget::getSolution()
 
 int Widget::getBoardWidth()
 {
-    int w = width();
-    int h = height();
-    return w < h ? w : h;
+    return getN() * getGridWidth();
 }
 
 int Widget::getGridWidth()
 {
-    int width = getBoardWidth();
-    QString a = ui->lineEdit_n->text();
-    int n = a.toInt();
-    return (width - 2 * boardMargin) / n;
+    int n = getN();
+    if (width() - 220 < height() )
+        return (width() - 270) / n;
+    else
+        return (height() - 100) / n;
 }
 
 void Widget::adjustPosition()
@@ -47,26 +46,26 @@ void Widget::adjustPosition()
     QString a = ui->lineEdit_n->text();
     int n = a.toInt();
     //窗口大小
-    this->resize(height() + 100 + 120, height());
+//    this->resize(height() + 100 + 120, height());
 
-    int xspace = (width() - (boardMargin + n * getGridWidth())) / 4;
+    int xspace = (width() - (xMargin + n * getGridWidth())) / 4;
     //int yspace = height() - 100;
     //复选框
-    ui->comboBox->resize(2 * xspace, 40);
-    ui->comboBox->move(width() - 3 * xspace, 50);
+    ui->comboBox->resize(120, 40);
+    ui->comboBox->move(width() - 170, 50);
     //标签
-    ui->label->move(width() - 3 * xspace, 50 + 60);
-    ui->label_width->move(width() - 3 * xspace + 60, 50 + 60);
-    ui->label_2->move(width() - 3 * xspace, 50 + 90);
-    ui->label_height->move(width() - 3 * xspace + 60, 50 + 90);
-    ui->label_3->move(width() - 3 * xspace, 50 + 120);
-    ui->label_time->move(width() - 3 * xspace + 60, 50 + 120);
+    ui->label->move(width() - 170, 50 + 60);
+    ui->label_width->move(width() - 170 + 60, 50 + 60);
+    ui->label_2->move(width() - 170, 50 + 90);
+    ui->label_height->move(width() - 170 + 60, 50 + 90);
+    ui->label_3->move(width() - 170, 50 + 120);
+    ui->label_time->move(width() - 170 + 60, 50 + 120);
     //单行输入框
-    ui->lineEdit_n->resize(2 * xspace, 40);
-    ui->lineEdit_n->move(width() - 3 * xspace, height() - 50 - 100);
+    ui->lineEdit_n->resize(120, 40);
+    ui->lineEdit_n->move(width() - 170, height() - 50 - 100);
     //RUN按钮
-    ui->pushButton_run->resize(2 * xspace, 40);
-    ui->pushButton_run->move(width() - 3 * xspace, height() - 50 - 40);
+    ui->pushButton_run->resize(120, 40);
+    ui->pushButton_run->move(width() - 170, height() - 50 - 40);
 }
 
 void Widget::paintEvent(QPaintEvent *event)
@@ -76,29 +75,30 @@ void Widget::paintEvent(QPaintEvent *event)
     ui->label_width->setText(QString::number(width()));
     ui->label_height->setText(QString::number(height()));
 
+    //计算棋盘边缘
+    if (width() - 220 < height() )
+    {
+        xMargin = 50;
+        yMargin = (height() - n * getGridWidth()) / 2;
+    }
+    else
+    {
+        xMargin = (width() - 220 - n * getGridWidth()) / 2;
+        yMargin = 50;
+    }
     //动态调整部件位置
     adjustPosition();
 
     QPainter painter(this);
-//    QPen pen=painter.pen();
-//    pen.setColor(QColor("#8D5822"));
-//    pen.setWidth(7);
-//    painter.setPen(pen);
-//    pen.setColor(Qt::black);
-//    pen.setWidth(1);
-//    painter.setPen(pen);
-    //QPen pen; // 调整线条宽度
-    //pen.setWidth(2);
-    //painter.setPen(pen);
-//    painter.drawLine(50,50,150,150);
-//    painter.drawLine(50,50,100,200);
     painter.setRenderHint(QPainter::Antialiasing, true); // 抗锯齿
 
     // 绘制棋盘
     for (int i = 0; i < n+1; i++)
     {
-        painter.drawLine(boardMargin + getGridWidth() * i, boardMargin, boardMargin + getGridWidth() * i, boardMargin + n * getGridWidth());
-        painter.drawLine(boardMargin, boardMargin + getGridWidth() * i, boardMargin + n * getGridWidth(), boardMargin + getGridWidth() * i);
+        //画竖线
+        painter.drawLine(xMargin + getGridWidth() * i, yMargin, xMargin + getGridWidth() * i, yMargin + getBoardWidth());
+        //画横线
+        painter.drawLine(xMargin, yMargin + getGridWidth() * i, xMargin + getBoardWidth(), yMargin + getGridWidth() * i);
     }
 
     QBrush brush;
@@ -119,20 +119,11 @@ void Widget::paintEvent(QPaintEvent *event)
                 char c=e[j];
                 if(c=='Q')
                 {
-//                    QRectF target(10.0, 20.0, 80.0, 60.0);
-//                    QRectF source(10.0, 20.0, 80.0, 60.0);
-                    painter.drawImage(boardMargin + j * getGridWidth(), boardMargin + i * getGridWidth(), scaledImage);
-                    //painter.drawText(boardMargin + getGridWidth() / 2 + j * getGridWidth(), boardMargin + getGridWidth() / 2 + i * getGridWidth(),"queen");
+                    painter.drawImage(xMargin + j * getGridWidth(), yMargin + i * getGridWidth(), scaledImage);
                 }
             }
         }
     }
-}
-
-//下拉选框有选项被选中时
-void Widget::on_comboBox_activated(const QString &arg1)
-{
-
 }
 
 //点击RUN按钮运行程序
