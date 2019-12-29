@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Backtrack.cpp \
     Genetic.cpp \
+    HillClimbing.cpp \
     NQueens.cpp \
     SimulatedAnnealing.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     Backtrack.h \
     Genetic.h \
+    HillClimbing.h \
     NQueens.h \
     SimulatedAnnealing.h \
     nqueens.h \

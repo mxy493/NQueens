@@ -36,5 +36,9 @@ vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
     }
     else if(algorithm == 3){
         //爬山法
+        HillClimbing queen(n);
+        vector<vector<string>> res = queen.solveNQueens();
+        time = queen.getTime();
+        return res;
     }
 }

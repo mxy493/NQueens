@@ -8,6 +8,7 @@
 #include "Backtrack.h"
 #include "Genetic.h"
 #include "SimulatedAnnealing.h"
+#include "HillClimbing.h"
 
 using namespace std;
 
