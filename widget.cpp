@@ -23,18 +23,17 @@ void Widget::getSolution()
 {
     NQueens queen;
     int algorithm = ui->comboBox->currentIndex();
-    nqueens = queen.solveNQueens(getN(), algorithm);
+    nqueens = queen.solveNQueens(n, algorithm);
     time = queen.getTime();
 }
 
 int Widget::getBoardWidth()
 {
-    return getN() * getGridWidth();
+    return n * getGridWidth();
 }
 
 int Widget::getGridWidth()
 {
-    int n = getN();
     if (width() - 220 < height() )
         return (width() - 270) / n;
     else
@@ -43,9 +42,7 @@ int Widget::getGridWidth()
 
 void Widget::adjustPosition()
 {
-    QString a = ui->lineEdit_n->text();
-    int n = a.toInt();
-    //窗口大小
+      //窗口大小
 //    this->resize(height() + 100 + 120, height());
 
     int xspace = (width() - (xMargin + n * getGridWidth())) / 4;
@@ -70,7 +67,6 @@ void Widget::adjustPosition()
 
 void Widget::paintEvent(QPaintEvent *event)
 {
-    int n = getN();//皇后数
     //打印窗口大小
     ui->label_width->setText(QString::number(width()));
     ui->label_height->setText(QString::number(height()));
@@ -129,9 +125,22 @@ void Widget::paintEvent(QPaintEvent *event)
 //点击RUN按钮运行程序
 void Widget::on_pushButton_run_clicked()
 {
+    n = getN();//按下RUN按钮才获取皇后数量
     getSolution();
 
     //打印耗时
+//    double time_to_print = time;
+//    QString time_string;
+//    if (time < 0.0001)
+//    {
+//        time_to_print = time * 1000;
+//        QString time_string = QString::number(time_to_print, 'f', 4);//以浮点数格式输出，小数点后保留四位
+//        time_string.append('ms');
+//    }
+//    else {
+//        time_string = QString::number(time_to_print, 'f', 4);//以浮点数格式输出，小数点后保留四位
+//        time_string.append('s');
+//    }
     QString time_string = QString::number(time, 'f', 4);//以浮点数格式输出，小数点后保留四位
     time_string.append('s');
     ui->label_time->setText(time_string);

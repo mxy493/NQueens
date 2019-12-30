@@ -27,6 +27,7 @@ class Widget : public QWidget
 private:
     Ui::Widget *ui;
 
+    int n = 8;//皇后数
     vector<vector<string>> nqueens;//保存获取到的解
     double time;//耗时
 
