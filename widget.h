@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMessageBox>
 
 #include <iostream>
 #include <string>

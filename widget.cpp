@@ -16,7 +16,12 @@ Widget::~Widget()
 int Widget::getN()
 {
     QString a = ui->lineEdit_n->text();
-    return a.toInt();
+    int result = a.toInt();
+    if(a.isEmpty() || (result < 4 && result != 1))
+    {
+        QMessageBox::warning(NULL, "Warning", "输入信息不符合要求（N==1或N>=4），请重新输入！", QMessageBox::Yes);
+    }
+    return result;
 }
 
 void Widget::getSolution()
@@ -67,6 +72,10 @@ void Widget::adjustPosition()
 
 void Widget::paintEvent(QPaintEvent *event)
 {
+    //不符合条件，后面的绘制会用到n，继续绘制会导致程序卡退
+    if(n < 4 && n != 1)
+        return;
+
     //打印窗口大小
     ui->label_width->setText(QString::number(width()));
     ui->label_height->setText(QString::number(height()));
@@ -126,6 +135,8 @@ void Widget::paintEvent(QPaintEvent *event)
 void Widget::on_pushButton_run_clicked()
 {
     n = getN();//按下RUN按钮才获取皇后数量
+    if(n < 4 && n != 1)
+        return;
     getSolution();
 
     //打印耗时
