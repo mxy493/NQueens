@@ -114,7 +114,7 @@ void Widget::paintEvent(QPaintEvent *event)
         vector<string> res=nqueens.front();
         //绘制第一种解法
         QImage image;
-        image.load("D:/mxy/Documents/QtProject/NQueens/NQueens/img/queen.png");
+        image.load(":/img/queen.png");
         QImage scaledImage = image.scaled(getGridWidth(), getGridWidth(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         for(int i=0;i < res.size();i++)
         {
