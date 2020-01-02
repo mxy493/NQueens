@@ -13,7 +13,7 @@ class HillClimbing
 private:
     vector<vector<int>> map;
     vector<vector<string>> nqueens;
-    double time;
+    double time_t;
     int n;
 
 public:
@@ -21,7 +21,7 @@ public:
     HillClimbing(int n);
     vector<vector<string>> solveNQueens();
     void vector_cpy(vector<int>& main_vector, vector<int>& copy_vector);
-    void rand();
+    void randGenerate();
     void clean();
     void set_map();
     void convert();
@@ -30,7 +30,7 @@ public:
     bool move(vector<int>& y, int row);
     bool search();
     void HCstart();
-    double getTime() { return time; }
+    double getTime() { return time_t; }
 };
 
 #endif // HILLCLIMBING_H

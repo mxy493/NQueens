@@ -9,7 +9,7 @@ vector<vector<string>> HillClimbing::solveNQueens()
     clock_t start = clock();
     HCstart();
     clock_t end = clock();
-    time = (double)(end - start) / CLOCKS_PER_SEC;
+    time_t = (double)(end - start) / CLOCKS_PER_SEC;
     return nqueens;
 }
 
@@ -19,13 +19,15 @@ void HillClimbing::vector_cpy(vector<int>& main_vector, vector<int>& copy_vector
     copy_vector.assign(main_vector.begin(), main_vector.end());
 }
 
-void HillClimbing::rand() {
+void HillClimbing::randGenerate() {
     clean();
-    random_device rd; //利用硬體系統給的值來取值
-    default_random_engine generator(rd()); //初始化，並利用rd()的值找出相對應的種子碼??
-    uniform_int_distribution<int> distribution(0, n - 1); //設定範圍與決定要產生什麼類型的亂數 ex:int float..
+//    random_device rd; //利用硬體系統給的值來取值
+//    default_random_engine generator(rd()); //初始化，並利用rd()的值找出相對應的種子碼??
+//    uniform_int_distribution<int> distribution(0, n - 1); //設定範圍與決定要產生什麼類型的亂數 ex:int float..
     for (int i = 0; i < n; i++) {
-        int randnumber = distribution(generator);
+//        int randnumber = distribution(generator);
+//        srand((unsigned)time(NULL));//初始化随机数
+        int randnumber = (rand() % (n));
         X.push_back(i);
         Y.push_back(randnumber);
     }
@@ -126,7 +128,7 @@ bool HillClimbing::search() {
         vector_cpy(Y, y);
         if (move(y, i)) {
             vector_cpy(y, Y);
-            cout << "End of Search.  price=" << price(X, Y) << endl;
+//            cout << "End of Search.  price=" << price(X, Y) << endl;
             return true;
         }
     }
@@ -136,12 +138,12 @@ bool HillClimbing::search() {
 void HillClimbing::HCstart() {
     int count = 0;
     while (true) {
-        rand();
+        randGenerate();
         while (true) {
             if (!search()) {
                 if (price(X, Y) == 0) {
                     convert();
-                    cout << "restart:" << count << "\n";
+//                    cout << "restart:" << count << "\n";
                     return;
                 }
                 else {
