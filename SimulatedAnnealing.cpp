@@ -1,164 +1,129 @@
 #include "SimulatedAnnealing.h"
 
-SimulatedAnnealing::SimulatedAnnealing()
-{
-    //构造函数
+// 默认构造函数
+simulatedAnnealing::simulatedAnnealing(int N) {
+    this->N = N;
 }
 
-// 随机生成初始状态
-void SimulatedAnnealing::initial() {
-    queens = new int* [n];
-    temp = new int* [n];
-    for (int i = 0; i < n; ++i) {
-        queens[i] = new int[n];
-        temp[i] = new int[n];
-        for (int j = 0; j < n; j++) {
-            queens[i][j] = 0;
-        }
+// 初始化棋盘
+void simulatedAnnealing::initChessboard(vector<int>& chessboard) {
+    for (int i = 0; i < N; i++) {
+        chessboard.push_back(i);
     }
-    for (int i = 0; i < n; i++) {
-        int num = rand() % n;
-        queens[i][num] = 1;
+
+    srand((unsigned)time(0));
+    for (int row1 = 0; row1 < N; row1++) {
+        int row2 = rand() % N;
+        // 随机交换行，打散棋盘，但保证皇后都在不同列
+        swap(chessboard[row1], chessboard[row2]);
     }
 }
 
-// 统计在该位置下所有皇后的冲突个数
-int SimulatedAnnealing::findCollision(int row, int col) {
-    int count = 0;
-    // 该位置为1
-    temp[row][col] = 1;
-    for (int k = 0; k < n * n; k++) {
-        if (temp[k / n][k % n] == 1) {
-            for (int i = 0; i < n; i++)                             // 同一列
-                if (i != k / n && temp[i][k % n] == 1)
-                    count++;
-            for (int i = k / n, j = k % n; i < n && j < n; i++, j++)    // 右下方
-                if (i != k / n && temp[i][j] == 1)
-                    count++;
-            for (int i = k / n, j = k % n; i >= 0 && j >= 0; i--, j--)  // 左上方
-                if (i != k / n && temp[i][j] == 1)
-                    count++;
-            for (int i = k / n, j = k % n; i < n && j >= 0; i++, j--)   // 左下方
-                if (i != k / n && temp[i][j] == 1)
-                    count++;
-            for (int i = k / n, j = k % n; i >= 0 && j < n; i--, j++)   // 右上方
-                if (i != k / n && temp[i][j] == 1)
-                    count++;
-        }
-    }
-    temp[row][col] = 0;  // 复原位置
-    return count / 2;
-}
-
-bool SimulatedAnnealing::check(int** h)
-{
-    for (int i = 0; i < n; i++) {
-        bool flag = false;
-        for (int j = 0; j < n; j++) {
-            if (queens[i][j] == 1 && h[i][j] == 0) { //皇后所在位置没有冲突
-                flag = true;
-                break;
+// 计算当前棋盘存在的相互攻击的皇后对数
+int simulatedAnnealing::getNumofConflicts(vector<int> *chessboard) {
+    int numOfConflicts = 0;
+    int width = this->N;
+    for (int i = 0; i < width; i++) {
+        for (int j = i + 1; j < width; j++) {
+            // 当存在皇后位于对角线的时候 冲突数+1
+            if (abs(j - i) == abs((*chessboard)[i] - (*chessboard)[j])) {
+                numOfConflicts++;
+            }
+            // 当存在皇后位于同一列的时候，冲突数+1
+            if ((*chessboard)[i] == (*chessboard)[j]) {
+                numOfConflicts++;
             }
         }
-        if (!flag) { // 皇后所在位置仍有冲突，还需要继续查找
-            return false;
-        }
     }
-    return true;
+    return numOfConflicts;
 }
 
-// 模拟退火搜索
-bool SimulatedAnnealing::simulated()
-{
-    double temperature = 5;
-    int trial = 0;
-    while (temperature > 0.00001) {
-        // 拷贝原始棋盘数据到temp
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                temp[i][j] = queens[i][j];
+//利用模拟退火算法得到该行的合适位置
+int simulatedAnnealing::properPosition(const vector<int> *chessboard, int row) {
+    double T = 18;          // 当前温度
+    double Tmin = 1.0;         // 最小温度
+    double decreaseRate = 0.5; // 降温速率
+
+    // 当前状态和下一状态
+    vector<int>* currentChessboard = new vector<int>(N);
+    vector<int>* nextChessboard = new vector<int>(N);
+
+    for (int i = 0; i < this->N; i++) {
+        (*currentChessboard)[i] = ((*chessboard)[i]);
+        (*nextChessboard)[i] = ((*chessboard)[i]);
+    }
+
+    //int queenPosition = 0;
+    // 开始模拟退火
+    while (T > Tmin) {
+        // 修改下一状态，改变row行的皇后位置
+        for (int queenPosition = 0; queenPosition < this->N; queenPosition++) {
+            (*nextChessboard)[row] = queenPosition;
+            // 得到前后状态的能量差
+            double dE = getNumofConflicts(nextChessboard) - getNumofConflicts(currentChessboard);
+            // 如果下一步更优则，接受该移动
+            if (dE <= 0) {
+                (*currentChessboard)[row] = (*nextChessboard)[row];
+                //cout << "更优，接受该移动" << " pos = " << queenPosition << endl;
             }
-        }
-        int** h = new int* [n];
-        for(int i = 0; i < n; i++)
-            h[i] = new int[n];
-        int curState;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                // 在计算h(i, j)之前，对i行所有位置赋值为0
-                for (int k = 0; k < n; k++)
-                    temp[i][k] = 0;
-                // 查找h(i, j)
-                h[i][j] = findCollision(i, j);
-                // 当前状态的h值
-                if (queens[i][j] == 1) {
-                    curState = h[i][j];
+            //  如果下一步更差，则一定几率接受该移动，几率逐渐变小
+            else {
+                if (exp((-1) * dE / T) > (rand() % 100)* 1.0 / 100) {
+                    //	cout << "更差，但还是接受该移动" << " pos = " << queenPosition << endl;
+                    (*currentChessboard)[row] = (*nextChessboard)[row];
                 }
-                // 计算h(i,j)之后要复原数据，避免计算错误
-                for (int k = 0; k < n; k++)
-                    temp[i][k] = queens[i][k];
+                else {
+                    //		cout << "  不接受该移动 pos = " << queenPosition << endl;
+                }
             }
         }
+        //  降温
+        T = decreaseRate * T;
 
-        // 随机选取一个下一状态
-        bool better = false;
-        int next, nextState, times = 0;
-
-        next = rand() % (n * n);
-        nextState = h[next / n][next % n];
-        int E = nextState - curState;
-        if (E < 0) {
-            better = true;
-        }
-        else if (exp((-1) * E / temperature) > ((double)(rand() % 1000) / 1000)) {
-            better = true;
-        }
-
-        if (better) {
-            for (int i = 0; i < n; i++)
-                queens[next / n][i] = 0;
-            queens[next / n][next % n] = 1;  // 放置皇后
-            trial++;
-        }
-
-        // 判断是否找到解, 有解则返回值为真
-        if (check(h)) {
-            totalTrial += trial;
-            return true;
-        }
-
-        temperature *= 0.99;
     }
-    return false;
+    //	cout << "-----------------------------" << endl;
+    return (*currentChessboard)[row];
 }
 
-// 模拟退火搜索
-void SimulatedAnnealing::simulatedAnnealing()
-{
-    int count = 0;
-    for (int i = 0; i < 1000; i++) {
-        initial();
-        if (simulated())
-            count++;
-    }
-//    return count;
+// 利用模拟退火算法修改该行，得到一个合适的位置
+//（不一定是当前最优，以一定几率接受一个更差的解）
+vector<int>* simulatedAnnealing::nextState(vector<int> *chessboard, int row) {
+    (*chessboard)[row] = properPosition(chessboard, row);
+    return chessboard;
 }
 
-vector<vector<string>> SimulatedAnnealing::solveNQueens(int n)
+// 求解主函数，在不同的行中不断搜寻下一步合适的位置
+vector<int>* simulatedAnnealing::solve(vector<int> *chessboard) {
+    int rowPosition = 0;
+    int step = 0;
+    while (getNumofConflicts(chessboard)) {
+        if (rowPosition == this->N) {
+            rowPosition %= rowPosition;
+        }
+        chessboard = nextState(chessboard, rowPosition++);
+        step++;
+    }
+//    cout << "Solved the problem, totally " << step << " steps. " << endl;
+    return chessboard;
+}
+
+vector<vector<string>> simulatedAnnealing::solveNQueens()
 {
-    this->n = n;
     clock_t start = clock();
-    simulatedAnnealing();
+    vector<int> chessboard;
+    initChessboard(chessboard);
+    solve(&chessboard);
     clock_t end = clock();
-    time = (double)(end-start)/CLOCKS_PER_SEC;
+    time_t = (double)(end-start)/CLOCKS_PER_SEC;
+
     vector<vector<string>> res;
     vector<string> vec;
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < N; i++)
     {
         string str;
-        for(int j = 0; j < n; j++)
+        for(int j = 0; j < N; j++)
         {
-            if(queens[i][j] == 1)
+            if(j == chessboard[i])
                 str += 'Q';
             else
                 str += '.';
@@ -168,3 +133,4 @@ vector<vector<string>> SimulatedAnnealing::solveNQueens(int n)
     res.push_back(vec);
     return res;
 }
+

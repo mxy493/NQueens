@@ -29,8 +29,8 @@ vector<vector<string>> NQueens::solveNQueens(int n, int algorithm) {
     }
     else if (algorithm == 2){
         //模拟退火
-        SimulatedAnnealing queen;
-        vector<vector<string>> res = queen.solveNQueens(n);
+        simulatedAnnealing queen(n);
+        vector<vector<string>> res = queen.solveNQueens();
         time = queen.getTime();
         return res;
     }

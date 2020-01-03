@@ -6,27 +6,26 @@
 #include <math.h>
 #include <vector>
 #include <time.h>
+#include<string>
 
 using namespace std;
 
-class SimulatedAnnealing
+class simulatedAnnealing
 {
 private:
-    int** queens;  //棋盘
-    int** temp;
-    int totalTrial;   // 统计移动步数
-    int n;//皇后数
-    double time;//耗时
-
+    int N;// 皇后的数目
+    double time_t;
 public:
-    SimulatedAnnealing();
-    void initial();
-    double getTime(){return time;}
-    int findCollision(int row, int col);
-    bool check(int** h);
-    bool simulated();
-    void simulatedAnnealing();
-    vector<vector<string>> solveNQueens(int n);
+    simulatedAnnealing(int N);// 默认构造函数
+    void initChessboard(vector<int>& chessboard);// 初始化棋盘
+    int getNumofConflicts(vector<int> *chessboard);// 计算当前棋盘存在的相互攻击的皇后对数
+    int properPosition(const vector<int> *chessboard, int row);//利用模拟退火算法得到该行的合适位置
+    // 利用模拟退火算法修改该行，得到一个合适的位置
+    //（不一定是当前最优，以一定几率接受一个更差的解）
+    vector<int>* nextState(vector<int> *chessboard, int row);
+    vector<int>* solve(vector<int> *chessboard);// 求解主函数，在不同的行中不断搜寻下一步合适的位置
+    vector<vector<string>> solveNQueens();
+    double getTime(){return time_t;}
 };
 
 #endif // SIMULATEDANNEALING_H
