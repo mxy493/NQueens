@@ -27,8 +27,13 @@ vector<vector<string>> Backtrack::solveNQueens(int n) {
 // 选择列表：第 row 行的所有列都是放置皇后的选择
 // 结束条件：row 超过 board 的最后一行
 void Backtrack::backtrack(vector<string>& board, int row) {
+    //找到一个解便不再继续往下找
+    if (res.size() != 0)
+        return;
+
     // 触发结束条件
     if (row == board.size()) {
+
         res.push_back(board);
         return;
     }
